@@ -31,7 +31,7 @@ namespace WebApplication1.Controllers
         [HttpGet("/api/Items/{id}/ItemImages")]
         public async Task<ActionResult<ICollection<ItemImage>>> GetItemImagesForItems(Guid itemId)
         {
-            var itemImage = await _context.ItemImages.FirstOrDefaultAsync(itemImage => itemImage.ItemId == itemId);
+            var itemImage = await _context.ItemImages.Where(itemImage => itemImage.ItemId == itemId).ToListAsync();
 
             if (itemImage == null)
             {

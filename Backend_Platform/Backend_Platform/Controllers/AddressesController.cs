@@ -49,9 +49,8 @@ namespace WebApplication1.Controllers
         public async Task<ActionResult<Address>> PostAddress(AddressesRecords.CreateAddressRecord addressRecord)
         {
               var address = new Address(){
-                Street = addressRecord.Street,
+                StreetAndHouseNumber = addressRecord.StreetAndHouseNumber,
                 City = addressRecord.City,  
-                HouseNumber = addressRecord.HouseNumber,
                 ZipCode = addressRecord.ZipCode,
             };
             _context.Addresses.Add(address);
@@ -65,7 +64,7 @@ namespace WebApplication1.Controllers
 
     public class AddressesRecords
     {
-        public record CreateAddressRecord(string Street, string City, string? HouseNumber, string ZipCode);
+        public record CreateAddressRecord(string StreetAndHouseNumber, string City, string ZipCode);
 
      }
 }

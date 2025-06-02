@@ -27,16 +27,14 @@ namespace WebApplication1.Controllers
 
         // GET: api/Users/5/Items
         [HttpGet("/api/Users/{userId}/Items")]
-        public async Task<ActionResult<Item>> GetItemForUser(Guid userId)
+        public async Task<ActionResult<ICollection<Item>>> GetItemsForUser(Guid userId)
         {
-            var item = await _context.Items.FirstOrDefaultAsync(item=>item.UserId == userId);
+            var items = await _context.Items
+                .Where(item => item.UserId == userId)
+                .ToListAsync();
 
-            if (item == null)
-            {
-                return NotFound();
-            }
 
-            return Content(JsonSerializer.Serialize(item, new JsonSerializerOptions
+            return Content(JsonSerializer.Serialize(items, new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             }), "application/json"); ; ;
@@ -113,7 +111,6 @@ namespace WebApplication1.Controllers
             var item = new Item(){
                Status  = requestRecord.Status,
                UserId = requestRecord.UserId,
-               CommunityPrintRequestId = requestRecord.CommunityPrintRequestId, 
                Title = requestRecord.Title, 
                Description      = requestRecord.Description,
                ConstructionFileId = requestRecord.ConstructionFileId,   
@@ -132,7 +129,7 @@ namespace WebApplication1.Controllers
 
     public class ItemRecords
     {
-        public record CreateItemRecord(RepairStatus Status, Guid UserId,  Guid? CommunityPrintRequestId ,string Title, string Description, Guid? ConstructionFileId);
+        public record CreateItemRecord(RepairStatus Status, Guid UserId, string Title, string Description, Guid? ConstructionFileId);
 
         public record UpdateItemRecord(Guid Id, RepairStatus Status, Guid UserId, Guid? CommunityPrintRequestId, string Title, string Description, Guid? ConstructionFileId);
     }
