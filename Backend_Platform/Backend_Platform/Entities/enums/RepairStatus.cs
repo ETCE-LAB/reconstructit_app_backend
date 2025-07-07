@@ -1,8 +1,8 @@
-﻿namespace Backend_Platform.Entities
+﻿namespace Backend_Platform.Entities.enums
 {
     public enum RepairStatus
     {
         Broken = 0,
-        Fixed   = 1,
+        Fixed = 1,
     }
 }

@@ -52,6 +52,7 @@ namespace WebApplication1.Controllers
                 StreetAndHouseNumber = addressRecord.StreetAndHouseNumber,
                 City = addressRecord.City,  
                 ZipCode = addressRecord.ZipCode,
+                Country = addressRecord.Country,    
             };
             _context.Addresses.Add(address);
             await _context.SaveChangesAsync();
@@ -77,6 +78,7 @@ namespace WebApplication1.Controllers
            address.City  = record.City;
             address.ZipCode = record.ZipCode;
             address.StreetAndHouseNumber = record.StreetAndHouseNumber;
+            address.Country = record.Country;
 
 
             _context.Entry(address).State = EntityState.Modified;
@@ -125,8 +127,8 @@ namespace WebApplication1.Controllers
 
     public class AddressesRecords
     {
-        public record CreateAddressRecord(string StreetAndHouseNumber, string City, string ZipCode);
-        public record UpdateAddressRecord(Guid Id, string StreetAndHouseNumber, string City, string ZipCode);
+        public record CreateAddressRecord(string StreetAndHouseNumber, string City, string ZipCode, string Country);
+        public record UpdateAddressRecord(Guid Id, string StreetAndHouseNumber, string City, string ZipCode, string Country);
 
     }
 }

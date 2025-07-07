@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Backend_Platform.Entities;
+using Backend_Platform.Entities.enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -70,6 +71,7 @@ namespace WebApplication1.Controllers
             request.Id = id;
             request.ItemId = record.ItemId;
             request.PriceMax = record.PriceMax; 
+            request.PrintMaterial   =record.PrintMaterial;
                
             _context.Entry(request).State = EntityState.Modified;
 
@@ -101,6 +103,7 @@ namespace WebApplication1.Controllers
             var communityPrintRequest = new CommunityPrintRequest(){
                PriceMax  = requestRecord.PriceMax,
                ItemId = requestRecord.ItemId,
+               PrintMaterial = requestRecord.PrintMaterial,
             };
             _context.CommunityPrintRequests.Add(communityPrintRequest);
             await _context.SaveChangesAsync();
@@ -143,8 +146,8 @@ namespace WebApplication1.Controllers
 
     public class CommunityPrintRequestRecords
     {
-        public record CreateCommunityPrintRequestRecord(double PriceMax, Guid ItemId);
+        public record CreateCommunityPrintRequestRecord(double PriceMax, Guid ItemId, PrintMaterial PrintMaterial);
 
-        public record UpdateCommunityPrintRequestRecord(Guid Id, double PriceMax, Guid ItemId);
+        public record UpdateCommunityPrintRequestRecord(Guid Id, double PriceMax, Guid ItemId, PrintMaterial PrintMaterial);
     }
 }

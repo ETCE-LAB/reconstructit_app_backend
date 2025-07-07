@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Backend_Platform.Entities;
+using Backend_Platform.Entities.enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +14,7 @@ using WebApplication1.Services;
 
 namespace WebApplication1.Controllers
 {
-   [Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ParticipantsController : ControllerBase
@@ -37,11 +38,11 @@ namespace WebApplication1.Controllers
             }), "application/json"); ; ;
         }
 
-        // GET: api/Chats/id/Participants
-        [HttpGet("/api/Chats/{chatId}/Participants")]
-        public async Task<ActionResult<ICollection<Participant>>> GetParticipantsForChat(Guid chatId)
+        // GET: api/PrintContract/id/Participants
+        [HttpGet("/api/PrintContract/{contractId}/Participants")]
+        public async Task<ActionResult<ICollection<Participant>>> GetParticipantsForPrintContract(Guid contractId)
         {
-            var participants = await _context.Participants.FirstOrDefaultAsync(participant => participant.ChatId == chatId);
+            var participants = await _context.Participants.FirstOrDefaultAsync(participant => participant.PrintContractId == contractId);
 
             return Content(JsonSerializer.Serialize(participants, new JsonSerializerOptions
             {
@@ -54,14 +55,14 @@ namespace WebApplication1.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Participant>> GetParticipant(string id)
         {
-            var chat = await _context.Participants.FindAsync(id);
+            var participant = await _context.Participants.FindAsync(id);
 
-            if (chat == null)
+            if (participant == null)
             {
                 return NotFound();
             }
 
-            return Content(JsonSerializer.Serialize(chat, new JsonSerializerOptions
+            return Content(JsonSerializer.Serialize(participant, new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             }), "application/json"); ; ;
@@ -78,7 +79,7 @@ namespace WebApplication1.Controllers
             var participant = new Participant(){
                Role  = participantRecord.Role,
                UserId = participantRecord.UserId,
-               ChatId   = participantRecord.ChatId,
+               PrintContractId   = participantRecord.PrintContractId,
             };
             _context.Participants.Add(participant);
             await _context.SaveChangesAsync();
@@ -95,7 +96,6 @@ namespace WebApplication1.Controllers
 
     public class ParticipantRecords
     {
-        public record CreateParticipantRecord(
-ParticipantRole Role, Guid? UserId,  Guid ChatId);
+        public record CreateParticipantRecord(ParticipantRole Role, Guid? UserId,  Guid PrintContractId);
     }
 }

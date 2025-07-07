@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.Data;
 
@@ -11,9 +12,11 @@ using WebApplication1.Data;
 namespace Backend_Platform.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20250707194237_removed_chats")]
+    partial class removed_chats
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -201,8 +204,7 @@ namespace Backend_Platform.Migrations
 
                     b.HasIndex("PaymentMethodId");
 
-                    b.HasIndex("PrintContractId")
-                        .IsUnique();
+                    b.HasIndex("PrintContractId");
 
                     b.ToTable("Payments");
                 });
@@ -217,7 +219,7 @@ namespace Backend_Platform.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("PaymentMethodId")
+                    b.Property<Guid?>("PaymentMethodId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -248,10 +250,10 @@ namespace Backend_Platform.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("PaymentAttributeId")
+                    b.Property<Guid>("AttributeId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("PaymentId")
+                    b.Property<Guid?>("PaymentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Value")
@@ -260,7 +262,7 @@ namespace Backend_Platform.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PaymentAttributeId");
+                    b.HasIndex("AttributeId");
 
                     b.HasIndex("PaymentId");
 
@@ -273,26 +275,23 @@ namespace Backend_Platform.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CommunityPrintRequestId")
+                    b.Property<Guid?>("AddressId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CommunityPrintRequestId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("ContractStatus")
                         .HasColumnType("int");
-
-                    b.Property<Guid?>("PaymentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("RevealedAddressId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("ShippingStatus")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CommunityPrintRequestId");
+                    b.HasIndex("AddressId");
 
-                    b.HasIndex("RevealedAddressId");
+                    b.HasIndex("CommunityPrintRequestId");
 
                     b.ToTable("PrintContracts");
                 });
@@ -411,9 +410,9 @@ namespace Backend_Platform.Migrations
                         .IsRequired();
 
                     b.HasOne("Backend_Platform.Entities.PrintContract", "PrintContract")
-                        .WithOne("Payment")
-                        .HasForeignKey("Backend_Platform.Entities.Payment", "PrintContractId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .WithMany("Payments")
+                        .HasForeignKey("PrintContractId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("PaymentMethod");
@@ -423,49 +422,35 @@ namespace Backend_Platform.Migrations
 
             modelBuilder.Entity("Backend_Platform.Entities.PaymentAttribute", b =>
                 {
-                    b.HasOne("Backend_Platform.Entities.PaymentMethod", "PaymentMethod")
+                    b.HasOne("Backend_Platform.Entities.PaymentMethod", null)
                         .WithMany("Attributes")
-                        .HasForeignKey("PaymentMethodId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("PaymentMethod");
+                        .HasForeignKey("PaymentMethodId");
                 });
 
             modelBuilder.Entity("Backend_Platform.Entities.PaymentValue", b =>
                 {
-                    b.HasOne("Backend_Platform.Entities.PaymentAttribute", "PaymentAttribute")
+                    b.HasOne("Backend_Platform.Entities.PaymentAttribute", "Attribute")
                         .WithMany("Values")
-                        .HasForeignKey("PaymentAttributeId")
+                        .HasForeignKey("AttributeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Backend_Platform.Entities.Payment", "Payment")
+                    b.HasOne("Backend_Platform.Entities.Payment", null)
                         .WithMany("PaymentValues")
-                        .HasForeignKey("PaymentId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .HasForeignKey("PaymentId");
 
-                    b.Navigation("Payment");
-
-                    b.Navigation("PaymentAttribute");
+                    b.Navigation("Attribute");
                 });
 
             modelBuilder.Entity("Backend_Platform.Entities.PrintContract", b =>
                 {
-                    b.HasOne("Backend_Platform.Entities.CommunityPrintRequest", "CommunityPrintRequest")
+                    b.HasOne("Backend_Platform.Entities.Address", null)
                         .WithMany("PrintContracts")
-                        .HasForeignKey("CommunityPrintRequestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AddressId");
 
-                    b.HasOne("Backend_Platform.Entities.Address", "RevealedAddress")
+                    b.HasOne("Backend_Platform.Entities.CommunityPrintRequest", null)
                         .WithMany("PrintContracts")
-                        .HasForeignKey("RevealedAddressId");
-
-                    b.Navigation("CommunityPrintRequest");
-
-                    b.Navigation("RevealedAddress");
+                        .HasForeignKey("CommunityPrintRequestId");
                 });
 
             modelBuilder.Entity("Backend_Platform.Entities.Address", b =>
@@ -508,7 +493,7 @@ namespace Backend_Platform.Migrations
                 {
                     b.Navigation("Participants");
 
-                    b.Navigation("Payment");
+                    b.Navigation("Payments");
                 });
 
             modelBuilder.Entity("Backend_Platform.Entities.User", b =>

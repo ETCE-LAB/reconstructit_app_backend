@@ -7,12 +7,13 @@ namespace Backend_Platform.Entities
     {
         public string StreetAndHouseNumber { get; set; }
         public string City { get; set; }
+        public string Country { get; set; }
         public string ZipCode { get; set; }
         [JsonIgnore]
         public virtual User User { get; set; }
         [ForeignKey("User")]
         public Guid UserId { get; set; }
         [JsonIgnore]
-        public virtual ICollection<Chat> Chats { get; set; } = [];
+        public virtual ICollection<PrintContract> PrintContracts { get; set; } = [];
     }
 }

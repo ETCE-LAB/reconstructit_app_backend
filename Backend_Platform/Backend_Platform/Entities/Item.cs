@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using Backend_Platform.Entities.enums;
 
 namespace Backend_Platform.Entities
 {
