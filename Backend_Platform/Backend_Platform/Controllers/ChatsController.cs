@@ -27,17 +27,29 @@ namespace WebApplication1.Controllers
         }
 
 
-        // PUT: api/CommunityPrintRequest/5/Chats
-        [HttpGet("/api/CommunityPrintRequests/{accountId}/Chats")]
-        public async Task<ActionResult<Chat>> GetChatForCommunityPrintRequest(Guid requestId)
+        // GET: api/CommunityPrintRequest/5/Chats
+        [HttpGet("/api/CommunityPrintRequests/{requestId}/Chats")]
+        public async Task<ActionResult<IEnumerable<Chat>>> GetChatForCommunityPrintRequest(Guid requestId)
         {
-            var chat = await _context.Chats.FirstOrDefaultAsync(chat => chat.CommunityPrintRequestId == requestId);
-            if (chat == null)
+            /*
+            // account id from token
+            var userAccountId = _claimsService.GetUserAccountId(User);
+            if (userAccountId == null)
             {
                 return NotFound();
             }
+            // get corresponding user
+            var user = await _context.Users.FirstOrDefaultAsync((user)=>user.UserAccountId == userAccountId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            // get all chats for the community print request
+            var chats = await _context.Chats.Where(chat => chat.CommunityPrintRequestId == requestId && chat.Participants.Any(p=> p.UserId! == user.Id)).ToListAsync();
+            */
+            var fixChats = await _context.Chats.Where(chat => chat.CommunityPrintRequestId == requestId ).ToListAsync();
 
-            return chat;
+            return fixChats;
         }
         // GET: api/Chats/5
         [HttpGet("{id}")]

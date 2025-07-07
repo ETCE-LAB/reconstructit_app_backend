@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Backend_Platform.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -33,9 +33,8 @@ namespace Backend_Platform.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Street = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StreetAndHouseNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     City = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    HouseNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ZipCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
@@ -85,8 +84,8 @@ namespace Backend_Platform.Migrations
                 {
                     table.PrimaryKey("PK_CommunityPrintRequests", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CommunityPrintRequests_Items_ItemId",
-                        column: x => x.ItemId,
+                        name: "FK_CommunityPrintRequests_Items_Id",
+                        column: x => x.Id,
                         principalTable: "Items",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -221,12 +220,6 @@ namespace Backend_Platform.Migrations
                 name: "IX_Chats_CommunityPrintRequestId",
                 table: "Chats",
                 column: "CommunityPrintRequestId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CommunityPrintRequests_ItemId",
-                table: "CommunityPrintRequests",
-                column: "ItemId",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ConstructionFiles_ItemId",

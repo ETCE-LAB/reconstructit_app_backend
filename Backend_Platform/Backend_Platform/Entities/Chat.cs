@@ -14,5 +14,6 @@ namespace Backend_Platform.Entities
         [JsonIgnore]
         public virtual Address? Address { get; set; }    
         public Guid? AddressId { get; set; }
+        
     }
 }

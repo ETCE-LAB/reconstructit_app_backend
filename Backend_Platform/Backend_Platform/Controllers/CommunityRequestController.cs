@@ -35,16 +35,16 @@ namespace WebApplication1.Controllers
         }
         // GET: api/CommunityPrintRequests/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<CommunityPrintRequest>> GetCommunityPrintRequest(string id)
+        public async Task<ActionResult<CommunityPrintRequest>> GetCommunityPrintRequest(Guid id)
         {
-            var chat = await _context.CommunityPrintRequests.FindAsync(id);
+            var request = await _context.CommunityPrintRequests.FindAsync(id);
 
-            if (chat == null)
+            if (request == null)
             {
                 return NotFound();
             }
 
-            return Content(JsonSerializer.Serialize(chat, new JsonSerializerOptions
+            return Content(JsonSerializer.Serialize(request, new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             }), "application/json"); ; ;
@@ -104,6 +104,12 @@ namespace WebApplication1.Controllers
             };
             _context.CommunityPrintRequests.Add(communityPrintRequest);
             await _context.SaveChangesAsync();
+            var item = await _context.Items.FindAsync(requestRecord.ItemId);
+            if (item != null)
+            {
+                item.CommunityPrintRequestId = communityPrintRequest.Id;
+                await _context.SaveChangesAsync();
+            }
 
             return CreatedAtAction(nameof(GetCommunityPrintRequest), new { id = communityPrintRequest.Id }, communityPrintRequest);
         }
@@ -119,6 +125,12 @@ namespace WebApplication1.Controllers
 
             _context.CommunityPrintRequests.Remove(request);
             await _context.SaveChangesAsync();
+            var item = await _context.Items.FindAsync(request.ItemId);
+            if (item != null)
+            {
+                item.CommunityPrintRequestId = null;
+                await _context.SaveChangesAsync();
+            }
 
             return NoContent();
         }

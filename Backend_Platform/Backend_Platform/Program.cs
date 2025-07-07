@@ -2,6 +2,8 @@ using WebApplication1.Data;
 using WebApplication1.Services.Implementation;
 using WebApplication1.Services;
 using Microsoft.EntityFrameworkCore;
+using Backend_Platform.Services;
+using Backend_Platform.Services.Implementation;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -9,10 +11,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<DBContext>(options =>
 {
     options.UseLazyLoadingProxies();
-    options.UseSqlServer("Server=tcp:dbserverreconstructit.database.windows.net,1433;Initial Catalog=Backend_Platform_DB;Persist Security Info=False;User ID=db_admin;Password=3a1e677c-fd30-4358-bf0c-7c6f73031c56;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+    options.UseSqlServer("CUSTOMCONSTR_reconstructitDatabase");
 });
 
-var tokenAuthority = "https://development-isse-identity-backend.azurewebsites.net";
+var tokenAuthority = "https://dev.backend.isse-identity.com";
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options =>
     {
@@ -31,6 +33,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<IClaimsService, ClaimsService>();
+builder.Services.AddSingleton<IMediaService, MediaService>();
 
 var app = builder.Build();
 

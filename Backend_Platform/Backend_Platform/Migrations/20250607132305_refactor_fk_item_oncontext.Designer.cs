@@ -12,8 +12,8 @@ using WebApplication1.Data;
 namespace Backend_Platform.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20250601105330_removed housenumber")]
-    partial class removedhousenumber
+    [Migration("20250607132305_refactor_fk_item_oncontext")]
+    partial class refactor_fk_item_oncontext
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
