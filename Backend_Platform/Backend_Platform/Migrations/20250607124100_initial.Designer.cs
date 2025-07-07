@@ -12,8 +12,8 @@ using WebApplication1.Data;
 namespace Backend_Platform.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20250521172719_init")]
-    partial class init
+    [Migration("20250607124100_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,11 +38,7 @@ namespace Backend_Platform.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("HouseNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Street")
+                    b.Property<string>("StreetAndHouseNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -85,7 +81,6 @@ namespace Backend_Platform.Migrations
             modelBuilder.Entity("Backend_Platform.Entities.CommunityPrintRequest", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ItemId")
@@ -95,9 +90,6 @@ namespace Backend_Platform.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ItemId")
-                        .IsUnique();
 
                     b.ToTable("CommunityPrintRequests");
                 });
@@ -296,7 +288,7 @@ namespace Backend_Platform.Migrations
                 {
                     b.HasOne("Backend_Platform.Entities.Item", "Item")
                         .WithOne("CommunityPrintRequest")
-                        .HasForeignKey("Backend_Platform.Entities.CommunityPrintRequest", "ItemId")
+                        .HasForeignKey("Backend_Platform.Entities.CommunityPrintRequest", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -58,13 +58,75 @@ namespace WebApplication1.Controllers
 
             return CreatedAtAction(nameof(GetAddress), address);
         }
+        // PUT: api/Adresses/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutAddress(Guid id, AddressesRecords.UpdateAddressRecord record)
+        {
+            if (id != record.Id)
+            {
+                return BadRequest();
+            }
+            var address = await _context.Addresses.FirstOrDefaultAsync(u => u.Id == id);
+            if (address == null)
+            {
+                return NotFound();
+            }
 
-       
+
+           address.City  = record.City;
+            address.ZipCode = record.ZipCode;
+            address.StreetAndHouseNumber = record.StreetAndHouseNumber;
+
+
+            _context.Entry(address).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!AddressExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        // DELETE: api/Addresses/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAddresses(Guid id)
+        {
+            var address = await _context.Addresses.FindAsync(id);
+            if (address == null)
+            {
+                return NotFound();
+            }
+
+            _context.Addresses.Remove(address);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        private bool AddressExists(Guid id)
+        {
+            return _context.Addresses.Any(e => e.Id == id);
+        }
+
     }
 
     public class AddressesRecords
     {
         public record CreateAddressRecord(string StreetAndHouseNumber, string City, string ZipCode);
+        public record UpdateAddressRecord(Guid Id, string StreetAndHouseNumber, string City, string ZipCode);
 
-     }
+    }
 }

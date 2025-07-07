@@ -42,7 +42,7 @@ namespace WebApplication1.Controllers
 
         // GET: api/Items/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Item>> GetItem(string id)
+        public async Task<ActionResult<Item>> GetItem(Guid id)
         {
             var item = await _context.Items.FindAsync(id);
 

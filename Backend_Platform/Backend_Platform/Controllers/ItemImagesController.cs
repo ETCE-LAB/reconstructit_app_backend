@@ -27,16 +27,42 @@ namespace WebApplication1.Controllers
 
 
 
-        // GET: api/Items/5/ItemImages
-        [HttpGet("/api/Items/{id}/ItemImages")]
-        public async Task<ActionResult<ICollection<ItemImage>>> GetItemImagesForItems(Guid itemId)
+        // GET: api/ItemImages/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ItemImage>> GetItemImage(Guid id)
         {
-            var itemImage = await _context.ItemImages.Where(itemImage => itemImage.ItemId == itemId).ToListAsync();
+            var itemImage = await _context.ItemImages.FirstOrDefaultAsync(itemImage => itemImage.Id == id);
 
             if (itemImage == null)
             {
                 return NotFound();
             }
+
+            return Content(JsonSerializer.Serialize(itemImage, new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            }), "application/json"); ; ;
+        }
+
+        // GET: api/Items/5/ItemImages
+        [HttpGet()]
+        public async Task<ActionResult<ICollection<ItemImage>>> GetItemImages()
+        {
+            var itemImage = await _context.ItemImages.ToListAsync();
+
+
+            return Content(JsonSerializer.Serialize(itemImage, new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            }), "application/json"); ; ;
+        }
+
+        // GET: api/Items/5/ItemImages
+        [HttpGet("/api/Items/{itemId}/ItemImages")]
+        public async Task<ActionResult<ICollection<ItemImage>>> GetItemImagesForItems(Guid itemId)
+        {
+            var itemImage = await _context.ItemImages.Where(itemImage => itemImage.ItemId == itemId).ToListAsync();
+
 
             return Content(JsonSerializer.Serialize(itemImage, new JsonSerializerOptions
             {
@@ -58,7 +84,7 @@ namespace WebApplication1.Controllers
             _context.ItemImages.Add(itemImage);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetItemImagesForItems), new { itemId = itemImageRecord.ItemId }, itemImage);
+            return CreatedAtAction(nameof(GetItemImage), new { id = itemImage.Id }, itemImage);
         }
         // DELETE: api/ItemImages/5
         [HttpDelete("{id}")]

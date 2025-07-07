@@ -17,7 +17,17 @@ namespace WebApplication1.Data
         public DbSet<Participant> Participants { get; set; }
         public DbSet<User> Users { get; set; }
 
+       
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<CommunityPrintRequest>()
+        .HasOne(cpr => cpr.Item)
+        .WithOne(item => item.CommunityPrintRequest)
+        .HasForeignKey<CommunityPrintRequest>(cpr => cpr.ItemId)
+        .OnDelete(DeleteBehavior.Cascade);
 
+            base.OnModelCreating(modelBuilder);
+        }
 
     }
 }
