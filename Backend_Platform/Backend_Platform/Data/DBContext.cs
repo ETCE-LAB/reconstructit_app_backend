@@ -92,6 +92,12 @@ namespace WebApplication1.Data
                 .HasForeignKey<Payment>(p => p.PrintContractId)
                 .OnDelete(DeleteBehavior.NoAction); // ✅
 
+            modelBuilder.Entity<Address>()
+            .HasOne(e => e.User)
+            .WithOne(r => r.Address)
+            .HasForeignKey<Address>(e => e.UserId)
+            .IsRequired(false);
+
             base.OnModelCreating(modelBuilder);
 
         }

@@ -27,7 +27,7 @@ namespace WebApplication1.Controllers
 
         // GET: api/Addresses/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Address>> GetAddress(string id)
+        public async Task<ActionResult<Address>> GetAddress(Guid id)
         {
             var address = await _context.Addresses.FindAsync(id);
 
@@ -42,22 +42,43 @@ namespace WebApplication1.Controllers
             }), "application/json"); ; ;
         }
 
-       
+        // GET: api/Users/5/Address
+        [HttpGet("/api/Users/{userId}/Address")]
+        public async Task<ActionResult<Address>> GetAddressForUser(Guid userId)
+        {
+            var address = await _context.Addresses.FirstOrDefaultAsync((address) => address.UserId == userId);
+
+            if (address == null)
+            {
+                return NotFound();
+            }
+
+            return Content(JsonSerializer.Serialize(address, new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            }), "application/json"); ; ;
+        }
+
+
         // POST: api/Addresses
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Address>> PostAddress(AddressesRecords.CreateAddressRecord addressRecord)
         {
+
               var address = new Address(){
                 StreetAndHouseNumber = addressRecord.StreetAndHouseNumber,
                 City = addressRecord.City,  
                 ZipCode = addressRecord.ZipCode,
                 Country = addressRecord.Country,    
+                UserId = addressRecord.UserId
             };
             _context.Addresses.Add(address);
-            await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetAddress), address);
+            await _context.SaveChangesAsync();
+        
+
+            return CreatedAtAction(nameof(GetAddress), new {address.Id}, address);
         }
         // PUT: api/Adresses/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -79,6 +100,7 @@ namespace WebApplication1.Controllers
             address.ZipCode = record.ZipCode;
             address.StreetAndHouseNumber = record.StreetAndHouseNumber;
             address.Country = record.Country;
+            address.UserId = record.UserId;
 
 
             _context.Entry(address).State = EntityState.Modified;
@@ -127,8 +149,8 @@ namespace WebApplication1.Controllers
 
     public class AddressesRecords
     {
-        public record CreateAddressRecord(string StreetAndHouseNumber, string City, string ZipCode, string Country);
-        public record UpdateAddressRecord(Guid Id, string StreetAndHouseNumber, string City, string ZipCode, string Country);
+        public record CreateAddressRecord(string StreetAndHouseNumber, string City, string ZipCode, string Country, Guid UserId);
+        public record UpdateAddressRecord(Guid Id, string StreetAndHouseNumber, string City, string ZipCode, string Country, Guid UserId);
 
     }
 }

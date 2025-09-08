@@ -20,7 +20,9 @@ namespace Backend_Platform.Controllers
                 _mediaService = mediaService;
             }
 
-            [HttpPost]
+        [RequestFormLimits(MultipartBodyLengthLimit = 1073741824)] // 1 GB
+        [RequestSizeLimit(1073741824)]
+        [HttpPost]
             public ActionResult<MediaRecords.UploadMediaResult> Media(IFormFile media)
             {
                 var uploadedFileUrl = _mediaService.UploadMedia(media);

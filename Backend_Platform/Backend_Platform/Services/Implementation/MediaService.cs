@@ -33,6 +33,10 @@ namespace Backend_Platform.Services.Implementation
                 {
                     blobHttpHeader.ContentType = "image/png";
                 }
+                else if (media.FileName.EndsWith("stl", StringComparison.OrdinalIgnoreCase))
+                {
+                    blobHttpHeader.ContentType = "application/sla";
+                }
 
                 blobClient.Upload(media.OpenReadStream(), new BlobUploadOptions { HttpHeaders = blobHttpHeader });
 

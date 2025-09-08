@@ -3,6 +3,7 @@ using Backend_Platform.Entities.enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 using WebApplication1.Data;
 
 namespace WebApplication1.Controllers
@@ -25,6 +26,12 @@ namespace WebApplication1.Controllers
                 PaymentMethodId = record.PaymentMethodId
             };
             _context.Payments.Add(payment);
+            // add payment id in contract
+            var contract = await  _context.PrintContracts.FindAsync(record.PrintContractId);
+            if (contract == null) return NotFound();
+            contract.PaymentId = payment.Id;
+           
+
             await _context.SaveChangesAsync();
             return Ok(payment);
         }
@@ -43,12 +50,19 @@ namespace WebApplication1.Controllers
             return NoContent();
         }
 
-        [HttpGet("/api/PrintContract/{id}/Payments")]
-        public async Task<ActionResult<IEnumerable<Payment>>> GetPaymentsByContract(Guid id)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Payment>> GetPayment(Guid id)
         {
-            return await _context.Payments
-                .Where(p => p.PrintContractId == id)
-                .ToListAsync();
+            var payment =  await _context.Payments.FindAsync(id);
+            if (payment == null)
+            {
+                return NotFound();
+            }
+
+            return Content(JsonSerializer.Serialize(payment, new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            }), "application/json"); ; ;
         }
     }
 

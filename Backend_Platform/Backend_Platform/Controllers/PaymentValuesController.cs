@@ -23,12 +23,12 @@ namespace WebApplication1.Controllers
             return Ok(value);
         }
 
-        [HttpGet("/api/PaymentMethod/{id}/paymentValues")]
-        public async Task<ActionResult<IEnumerable<PaymentValue>>> GetValuesForMethod(Guid id)
+        [HttpGet("/api/Payment/{id}/paymentValues")]
+        public async Task<ActionResult<IEnumerable<PaymentValue>>> GetValuesForPayment(Guid id)
         {
-            var values = await _context.PaymentAttributes
-                .Where(attr => attr.PaymentMethodId == id)
-                .SelectMany(attr => attr.Values)
+            var values = await _context.PaymentValues
+                .Where(attr => attr.PaymentId == id)
+                
                 .ToListAsync();
 
             return values;

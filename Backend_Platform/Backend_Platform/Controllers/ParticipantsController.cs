@@ -30,7 +30,7 @@ namespace WebApplication1.Controllers
         [HttpGet("/api/Users/{userId}/Participants")]
         public async Task<ActionResult<ICollection<Participant>>> GetParticipantsForUser(Guid userId)
         {
-            var participants = await _context.Participants.FirstOrDefaultAsync(participant => participant.UserId ==userId );
+            var participants = await _context.Participants.Where(participant => participant.UserId ==userId ).ToListAsync();
 
             return Content(JsonSerializer.Serialize(participants, new JsonSerializerOptions
             {
@@ -42,7 +42,7 @@ namespace WebApplication1.Controllers
         [HttpGet("/api/PrintContract/{contractId}/Participants")]
         public async Task<ActionResult<ICollection<Participant>>> GetParticipantsForPrintContract(Guid contractId)
         {
-            var participants = await _context.Participants.FirstOrDefaultAsync(participant => participant.PrintContractId == contractId);
+            var participants = await _context.Participants.Where(participant => participant.PrintContractId == contractId).ToListAsync();
 
             return Content(JsonSerializer.Serialize(participants, new JsonSerializerOptions
             {

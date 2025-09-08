@@ -75,7 +75,6 @@ namespace WebApplication1.Controllers
 
 
             user.Id = id;
-            user.AddressId = record.AddressId;
                 user.FirstName = record.FirstName;
             user.LastName = record.LastName;
             user.UserProfilePictureUrl = record.UserProfilePictureUrl;

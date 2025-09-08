@@ -3,6 +3,7 @@ using Backend_Platform.Entities.enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.Contracts;
 using System.Text.Json;
 using WebApplication1.Data;
 
@@ -59,6 +60,19 @@ namespace WebApplication1.Controllers
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             }), "application/json"); ; ;
         }
+
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<PrintContract>> GetPrintContract(Guid id)
+        {
+            var contract = await _context.PrintContracts.FindAsync(id);
+            return Content(JsonSerializer.Serialize(contract, new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            }), "application/json"); ; ;
+        }
+
+        
     }
 
     public class PrintContractRecords

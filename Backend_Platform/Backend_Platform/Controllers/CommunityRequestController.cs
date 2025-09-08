@@ -32,6 +32,8 @@ namespace WebApplication1.Controllers
         public async Task<ActionResult<ICollection<CommunityPrintRequest>>> GetCommunityPrintRequests()
         {
             var requests = await _context.CommunityPrintRequests.ToListAsync();
+            // return the newest at first
+            requests.Reverse();
             return requests;
         }
         // GET: api/CommunityPrintRequests/5
@@ -67,10 +69,9 @@ namespace WebApplication1.Controllers
             }
 
 
-
+            // TODO: update price if material changed
             request.Id = id;
             request.ItemId = record.ItemId;
-            request.PriceMax = record.PriceMax; 
             request.PrintMaterial   =record.PrintMaterial;
                
             _context.Entry(request).State = EntityState.Modified;
@@ -99,9 +100,9 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public async Task<ActionResult<CommunityPrintRequest>> PostCommunityPrintRequest(CommunityPrintRequestRecords.CreateCommunityPrintRequestRecord requestRecord)
         {
-            
+            // TODO calculate price            
             var communityPrintRequest = new CommunityPrintRequest(){
-               PriceMax  = requestRecord.PriceMax,
+               PriceMax  = 100.0,
                ItemId = requestRecord.ItemId,
                PrintMaterial = requestRecord.PrintMaterial,
             };
@@ -146,8 +147,8 @@ namespace WebApplication1.Controllers
 
     public class CommunityPrintRequestRecords
     {
-        public record CreateCommunityPrintRequestRecord(double PriceMax, Guid ItemId, PrintMaterial PrintMaterial);
+        public record CreateCommunityPrintRequestRecord(Guid ItemId, PrintMaterial PrintMaterial);
 
-        public record UpdateCommunityPrintRequestRecord(Guid Id, double PriceMax, Guid ItemId, PrintMaterial PrintMaterial);
+        public record UpdateCommunityPrintRequestRecord(Guid Id, Guid ItemId, PrintMaterial PrintMaterial);
     }
 }

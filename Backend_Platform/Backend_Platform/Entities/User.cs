@@ -12,7 +12,6 @@ public string Region { get; set; } = string.Empty;
         public string? UserProfilePictureUrl { get; set; } = string.Empty;
         [JsonIgnore]
         public virtual Address? Address { get; set; }
-        public Guid? AddressId { get; set; }
         [JsonIgnore]
         public virtual ICollection<Participant> Contracts { get; set; } = [];
         [JsonIgnore]
