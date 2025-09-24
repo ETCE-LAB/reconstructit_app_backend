@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
-using System.Threading.Tasks;
-using Backend_Platform.Entities;
+﻿using Backend_Platform.Entities;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 using WebApplication1.Data;
-using WebApplication1.Services;
 
 namespace WebApplication1.Controllers
 {
-   [Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AddressesController : ControllerBase
@@ -61,7 +55,6 @@ namespace WebApplication1.Controllers
 
 
         // POST: api/Addresses
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Address>> PostAddress(AddressesRecords.CreateAddressRecord addressRecord)
         {
@@ -81,7 +74,6 @@ namespace WebApplication1.Controllers
             return CreatedAtAction(nameof(GetAddress), new {address.Id}, address);
         }
         // PUT: api/Adresses/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAddress(Guid id, AddressesRecords.UpdateAddressRecord record)
         {
@@ -96,7 +88,7 @@ namespace WebApplication1.Controllers
             }
 
 
-           address.City  = record.City;
+            address.City  = record.City;
             address.ZipCode = record.ZipCode;
             address.StreetAndHouseNumber = record.StreetAndHouseNumber;
             address.Country = record.Country;

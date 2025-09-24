@@ -11,9 +11,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<DBContext>(options =>
 {
     options.UseLazyLoadingProxies();
-    options.UseSqlServer("CUSTOMCONSTR_reconstructitDatabase");
+    options.UseSqlServer(Environment.GetEnvironmentVariable("CUSTOMCONNSTR_reconstructitDatabase"));
 });
-
+// Identity Server
 var tokenAuthority = "https://dev.backend.isse-identity.com";
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options =>
@@ -27,11 +27,10 @@ builder.Services.AddAuthentication("Bearer")
 builder.Services.AddAuthorization();
 builder.Services.AddCors();
 builder.Services.AddControllers();
-
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Add Services build in this project
 builder.Services.AddSingleton<IClaimsService, ClaimsService>();
 builder.Services.AddSingleton<IMediaService, MediaService>();
 
@@ -40,8 +39,6 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
-
-
 app.UseHttpsRedirection();
 
 app.UseAuthentication();

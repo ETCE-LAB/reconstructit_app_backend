@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿using Azure.Core;
 using Backend_Platform.Entities;
+using Backend_Platform.Entities.enums;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using WebApplication1.Data;
-using WebApplication1.Services;
 
 namespace WebApplication1.Controllers
 {
-   [Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ConstructionFilesController : ControllerBase
@@ -29,7 +26,7 @@ namespace WebApplication1.Controllers
      
         // GET: api/ConstructionFiles/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ConstructionFile>> GetConstructionFile(string id)
+        public async Task<ActionResult<ConstructionFile>> GetConstructionFile(Guid id)
         {
             var constructionFIle = await _context.ConstructionFiles.FindAsync(id);
 
@@ -45,7 +42,6 @@ namespace WebApplication1.Controllers
         }
 
         // PUT: api/ConstructionFiles/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutConstructionFile(Guid id, ConstructionFileRecords.UpdateConstructionFileRecord record)
         {
@@ -88,17 +84,24 @@ namespace WebApplication1.Controllers
         }
 
         // POST: api/ConstructionFiles
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<ConstructionFile>> PostConstructionFile(ConstructionFileRecords.CreateConstructionFileRecord constructionFIleRecord)
+        public async Task<ActionResult<ConstructionFile>> PostConstructionFile(ConstructionFileRecords.CreateConstructionFileRecord constructionFileRecord)
         {
             
             var constructionFile = new ConstructionFile(){
-               FileUrl  = constructionFIleRecord.FileUrl,
-               CreatedAt    = constructionFIleRecord.createdAt,
-               ItemId = constructionFIleRecord.ItemId,
+               FileUrl  = constructionFileRecord.FileUrl,
+               CreatedAt    = constructionFileRecord.createdAt,
+               ItemId = constructionFileRecord.ItemId,
             };
             _context.ConstructionFiles.Add(constructionFile);
+            var item = await _context.Items.FindAsync(constructionFileRecord.ItemId);
+            if(item == null)
+            {
+                return NotFound();
+            }
+
+            item.ConstructionFileId = constructionFile.Id;
+            _context.Entry(item).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetConstructionFile), new { id = constructionFile.Id }, constructionFile);

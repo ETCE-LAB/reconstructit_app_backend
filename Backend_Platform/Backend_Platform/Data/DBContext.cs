@@ -23,52 +23,6 @@ namespace WebApplication1.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // item 1 => 0..1 communityprintrequest 
-            /*
-            modelBuilder.Entity<CommunityPrintRequest>()
-        .HasOne(cpr => cpr.Item)
-        .WithOne(item => item.CommunityPrintRequest)
-        .HasForeignKey<CommunityPrintRequest>(cpr => cpr.ItemId)
-        .OnDelete(DeleteBehavior.Cascade);
-            */
-            // PrintContract 1 => 0..1 Payment
-            /*
-            modelBuilder.Entity<Payment>()
-                .HasOne(p => p.PrintContract)
-                .WithOne(p => p.Payment)
-                .HasForeignKey<PrintContract>(p => p.PaymentId)
-                .OnDelete(DeleteBehavior.NoAction);
-            */
-            /*
-            modelBuilder.Entity<PrintContract>()
-    .HasOne(pc => pc.Payment)
-    .WithOne(p => p.PrintContract)
-    .HasForeignKey<Payment>(p => p.PrintContractId)
-    .OnDelete(DeleteBehavior.NoAction);
-            */
-            // no cascading between payment and payment value
-            /*
-                 modelBuilder.Entity<PaymentValue>()
-         .HasOne(pv => pv.Payment)
-         .WithMany(p => p.PaymentValues)
-         .HasForeignKey(pv => pv.PaymentId)
-         .OnDelete(DeleteBehavior.NoAction);
-            */
-            /*
-                 modelBuilder.Entity<Payment>()
-           .HasMany(p => p.PaymentValues)
-           .WithOne(pv => pv.Payment)
-           .HasForeignKey(pv => pv.PaymentId)
-           .OnDelete(DeleteBehavior.NoAction);
-            */
-            /*
-            modelBuilder.Entity<PaymentValue>()
-    .HasOne(pv => pv.PaymentAttribute)
-    .WithMany()
-    .HasForeignKey(pv => pv.PaymentAttributeId)
-    .OnDelete(DeleteBehavior.NoAction);
-           
-            */
             // 1:1 Item - CommunityPrintRequest
             modelBuilder.Entity<CommunityPrintRequest>()
                 .HasOne(cpr => cpr.Item)
@@ -83,14 +37,14 @@ namespace WebApplication1.Data
                 .HasMany(p => p.PaymentValues)
                 .WithOne(pv => pv.Payment)
                 .HasForeignKey(pv => pv.PaymentId)
-                .OnDelete(DeleteBehavior.NoAction); // ❌ keine Cascade hier
+                .OnDelete(DeleteBehavior.NoAction); 
 
             // PrintContract → Payment (NoAction)
             modelBuilder.Entity<PrintContract>()
                 .HasOne(pc => pc.Payment)
                 .WithOne(p => p.PrintContract)
                 .HasForeignKey<Payment>(p => p.PrintContractId)
-                .OnDelete(DeleteBehavior.NoAction); // ✅
+                .OnDelete(DeleteBehavior.NoAction); 
 
             modelBuilder.Entity<Address>()
             .HasOne(e => e.User)

@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
-using System.Threading.Tasks;
-using Backend_Platform.Entities;
+﻿using Backend_Platform.Entities;
 using Backend_Platform.Entities.enums;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 using WebApplication1.Data;
-using WebApplication1.Services;
 
 namespace WebApplication1.Controllers
 {
-   [Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CommunityPrintRequestsController : ControllerBase
@@ -36,6 +30,7 @@ namespace WebApplication1.Controllers
             requests.Reverse();
             return requests;
         }
+
         // GET: api/CommunityPrintRequests/5
         [HttpGet("{id}")]
         public async Task<ActionResult<CommunityPrintRequest>> GetCommunityPrintRequest(Guid id)
@@ -54,7 +49,6 @@ namespace WebApplication1.Controllers
         }
 
         // PUT: api/CommunityPrintRequests/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCommunityPrintRequest(Guid id, CommunityPrintRequestRecords.UpdateCommunityPrintRequestRecord record)
         {
@@ -68,8 +62,7 @@ namespace WebApplication1.Controllers
                 return NotFound();
             }
 
-
-            // TODO: update price if material changed
+            // update price if material changed if the model weight feature is build
             request.Id = id;
             request.ItemId = record.ItemId;
             request.PrintMaterial   =record.PrintMaterial;
@@ -96,11 +89,10 @@ namespace WebApplication1.Controllers
         }
 
         // POST: api/CommunityPrintRequests
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<CommunityPrintRequest>> PostCommunityPrintRequest(CommunityPrintRequestRecords.CreateCommunityPrintRequestRecord requestRecord)
         {
-            // TODO calculate price            
+            // When including the weight for an model, the price should be build with it          
             var communityPrintRequest = new CommunityPrintRequest(){
                PriceMax  = 100.0,
                ItemId = requestRecord.ItemId,

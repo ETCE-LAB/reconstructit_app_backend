@@ -3,7 +3,6 @@ using Backend_Platform.Entities.enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics.Contracts;
 using System.Text.Json;
 using WebApplication1.Data;
 
@@ -17,6 +16,7 @@ namespace WebApplication1.Controllers
         private readonly DBContext _context;
         public PrintContractsController(DBContext context) => _context = context;
 
+        // POST: api/PrintContracts
         [HttpPost]
         public async Task<ActionResult<PrintContract>> PostPrintContract(PrintContractRecords.CreatePrintContractRecord record)
         {
@@ -32,6 +32,7 @@ namespace WebApplication1.Controllers
             return CreatedAtAction(nameof(GetPrintContractsByRequest), new { id = record.CommunityPrintRequestId }, contract);
         }
 
+        // PUT: api/PrintContracts/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPrintContract(Guid id, PrintContractRecords.UpdatePrintContractRecord record)
         {
@@ -48,6 +49,7 @@ namespace WebApplication1.Controllers
             return NoContent();
         }
 
+        // GET: api/CommunityPrintRequest/5/PrintContracts
         [HttpGet("/api/CommunityPrintRequest/{id}/PrintContracts")]
         public async Task<ActionResult<IEnumerable<PrintContract>>> GetPrintContractsByRequest(Guid id)
         {
@@ -61,7 +63,7 @@ namespace WebApplication1.Controllers
             }), "application/json"); ; ;
         }
 
-
+        // GET api/PrintContracts/5
         [HttpGet("{id}")]
         public async Task<ActionResult<PrintContract>> GetPrintContract(Guid id)
         {

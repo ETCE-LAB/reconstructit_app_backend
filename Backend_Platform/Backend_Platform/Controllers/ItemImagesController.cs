@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
-using System.Threading.Tasks;
-using Backend_Platform.Entities;
+﻿using Backend_Platform.Entities;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 using WebApplication1.Data;
-using WebApplication1.Services;
 
 namespace WebApplication1.Controllers
 {
-   [Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ItemImagesController : ControllerBase
@@ -24,8 +18,6 @@ namespace WebApplication1.Controllers
             _context = context;
             
         }
-
-
 
         // GET: api/ItemImages/5
         [HttpGet("{id}")]
@@ -44,7 +36,7 @@ namespace WebApplication1.Controllers
             }), "application/json"); ; ;
         }
 
-        // GET: api/Items/5/ItemImages
+        // GET: api/ItemImages
         [HttpGet()]
         public async Task<ActionResult<ICollection<ItemImage>>> GetItemImages()
         {
@@ -72,7 +64,6 @@ namespace WebApplication1.Controllers
 
        
         // POST: api/ItemImages
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<ItemImage>> PostItemImage(ItemImageRecords.CreateItemImageRecord itemImageRecord)
         {

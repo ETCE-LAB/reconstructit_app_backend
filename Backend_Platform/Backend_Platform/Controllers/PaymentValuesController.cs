@@ -14,6 +14,8 @@ namespace WebApplication1.Controllers
         private readonly DBContext _context;
         public PaymentValuesController(DBContext context) => _context = context;
 
+
+        // POST: api/PaymentValues
         [HttpPost]
         public async Task<ActionResult<PaymentValue>> PostValue(PaymentValueRecord record)
         {
@@ -23,6 +25,7 @@ namespace WebApplication1.Controllers
             return Ok(value);
         }
 
+        // GET: api/Payment/5/PaymentValues
         [HttpGet("/api/Payment/{id}/paymentValues")]
         public async Task<ActionResult<IEnumerable<PaymentValue>>> GetValuesForPayment(Guid id)
         {
