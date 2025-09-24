@@ -7,8 +7,6 @@ be 3D-printed directly or requested from the community.
 
 This backend is already deployed but there are some features missing. A description of next steps as well as already implemented features can be found in the projects submission file.
 
-There is a video of the current state of the application available on [YouTube](https://www.youtube.com/watch?v=U8foj0fZ1Xc).
-
 ## Run the Backend
 
 To execute the backend locally, ensure that you have C# with .NET installed in your system.
