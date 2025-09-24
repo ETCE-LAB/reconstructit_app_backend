@@ -14,10 +14,12 @@ namespace WebApplication1.Controllers
         private readonly DBContext _context;
         public PaymentMethodsController(DBContext context) => _context = context;
 
+        // GET: api/PaymentMethods
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PaymentMethod>>> GetAll() =>
             await _context.PaymentMethods.ToListAsync();
 
+        // GET: api/PaymentMethods/5
         [HttpGet("{id}")]
         public async Task<ActionResult<PaymentMethod>> GetById(Guid id)
         {

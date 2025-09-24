@@ -7,7 +7,7 @@ namespace Backend_Platform.Services.Implementation
     {
         public string? UploadMedia(IFormFile media)
         {
-            var connectionString = "CUSTOMCONSTR_reconstructitBlob";
+            var connectionString = Environment.GetEnvironmentVariable("CUSTOMCONNSTR_reconstructitBlob");
             if (connectionString == null)
             {
                 return null;

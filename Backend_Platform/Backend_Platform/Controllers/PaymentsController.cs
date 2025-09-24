@@ -2,7 +2,6 @@
 using Backend_Platform.Entities.enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using WebApplication1.Data;
 
@@ -16,6 +15,7 @@ namespace WebApplication1.Controllers
         private readonly DBContext _context;
         public PaymentsController(DBContext context) => _context = context;
 
+        // POST: api/Payments
         [HttpPost]
         public async Task<ActionResult<Payment>> PostPayment(PaymentRecords.CreatePaymentRecord record)
         {
@@ -36,6 +36,7 @@ namespace WebApplication1.Controllers
             return Ok(payment);
         }
 
+        // PUT: api/Payments/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPayment(Guid id, PaymentRecords.UpdatePaymentRecord record)
         {
@@ -50,6 +51,7 @@ namespace WebApplication1.Controllers
             return NoContent();
         }
 
+        // GET: api/Payments/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Payment>> GetPayment(Guid id)
         {

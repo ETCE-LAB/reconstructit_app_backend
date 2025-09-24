@@ -15,6 +15,7 @@ namespace WebApplication1.Controllers
         private readonly DBContext _context;
         public PaymentAttributesController(DBContext context) => _context = context;
 
+        // GET: api/PaymentMethodDefinition/5/PaymentAttributes
         [HttpGet("/api/PaymentMethodDefinition/{id}/PaymentAttributes")]
         public async Task<ActionResult<IEnumerable<PaymentAttribute>>> GetAttributesForMethod(Guid id)
         {
@@ -23,6 +24,7 @@ namespace WebApplication1.Controllers
                 .ToListAsync();
         }
 
+        // GET: api/PaymentAttributes/5
         [HttpGet("{id}")]
         public async Task<ActionResult<PaymentAttribute>> GetById(Guid id)
         {

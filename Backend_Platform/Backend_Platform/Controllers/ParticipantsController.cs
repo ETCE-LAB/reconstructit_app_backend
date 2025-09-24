@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
-using System.Threading.Tasks;
-using Backend_Platform.Entities;
+﻿using Backend_Platform.Entities;
 using Backend_Platform.Entities.enums;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 using WebApplication1.Data;
-using WebApplication1.Services;
 
 namespace WebApplication1.Controllers
 {
@@ -71,7 +65,6 @@ namespace WebApplication1.Controllers
      
 
         // POST: api/Participants
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Participant>> PostParticipant(ParticipantRecords.CreateParticipantRecord participantRecord)
         {
