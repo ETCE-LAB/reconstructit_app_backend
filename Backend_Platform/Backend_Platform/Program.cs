@@ -14,7 +14,7 @@ builder.Services.AddDbContext<DBContext>(options =>
     options.UseSqlServer(Environment.GetEnvironmentVariable("CUSTOMCONNSTR_reconstructitDatabase"));
 });
 // Identity Server
-var tokenAuthority = "https://dev.backend.isse-identity.com";
+var tokenAuthority = "https://dev.identity-backend.recircit.ceconsoft.de";
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options =>
     {
